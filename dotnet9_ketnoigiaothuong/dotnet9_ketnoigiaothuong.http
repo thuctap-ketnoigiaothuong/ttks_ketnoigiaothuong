@@ -1,0 +1,6 @@
+@dotnet9_ketnoigiaothuong_HostAddress = http://localhost:5225
+
+GET {{dotnet9_ketnoigiaothuong_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
