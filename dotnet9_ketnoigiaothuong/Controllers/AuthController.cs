@@ -56,8 +56,20 @@ namespace dotnet9_ketnoigiaothuong.Controllers
                 HttpOnly = true,
                 Secure = true,
             });
-
-            return Ok(new { message = "Logged in successfully" });
+            
+            if (user.Role == "Admin")
+            {
+                return Ok(new { 
+                    message = "Logged in successfully", 
+                    redirect_url = "/admin/dashdoard"
+                });
+            }
+            else { 
+                return Ok(new { 
+                    message = "Logged in successfully",
+                    redirect_url = "/home"
+                });
+            }
         }
 
         [HttpPost("logout")]
