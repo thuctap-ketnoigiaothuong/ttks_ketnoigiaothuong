@@ -1,30 +1,33 @@
-﻿using dotnet9_ketnoigiaothuong.Infrastructure.Context;
+﻿using dotnet9_ketnoigiaothuong.Domain.Validators;
+using dotnet9_ketnoigiaothuong.Infrastructure.Context;
 using dotnet9_ketnoigiaothuong.Infrastructure.Exceptions;
+using dotnet9_ketnoigiaothuong.Infrastructure.Mapping;
 using dotnet9_ketnoigiaothuong.Services;
-using dotnet9_ketnoigiaothuong.Services.Token;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.AuthContract;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 #region Register services in Dependency Injection
 
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IValidator<LoginViewModel>, LoginViewModelValidator>();
+builder.Services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValidator>();
+builder.Services.AddScoped<DbInitializer>();
 
 #endregion
 
@@ -45,7 +48,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwt["Issuer"],
         ValidAudience = jwt["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!))
     };
     options.Events = new JwtBearerEvents
     {
@@ -97,39 +100,11 @@ app.UseExceptionHandler();
 
 app.MapControllers();
 
-#region Check Database Connection
-
+// Initialize data
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    try
-    {
-        if (dbContext.Database.CanConnect())
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Successfully connected to the database.");
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Could not connect to the database.");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("Error while connecting to the database:");
-        Console.WriteLine(ex.Message);
-    }
-    finally
-    {
-        Console.ResetColor();
-    }
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+    dbInitializer.SeedData();
 }
-
-#endregion
-
-// Initial Data
-DbInitializer.SeedData(app);
 
 app.Run();

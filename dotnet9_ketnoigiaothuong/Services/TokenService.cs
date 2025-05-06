@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace dotnet9_ketnoigiaothuong.Services.Token
+namespace dotnet9_ketnoigiaothuong.Services
 {
     public class TokenService : ITokenService
     {

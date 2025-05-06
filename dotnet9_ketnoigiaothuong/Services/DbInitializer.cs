@@ -1,18 +1,19 @@
-﻿using dotnet9_ketnoigiaothuong.Domain.Entities;
+﻿using AutoMapper;
+using dotnet9_ketnoigiaothuong.Domain.Entities;
 using dotnet9_ketnoigiaothuong.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet9_ketnoigiaothuong.Services
 {
-    public static class DbInitializer
+    public class DbInitializer : BaseRepository
     {
-        public static void SeedData(IApplicationBuilder app)
+        public DbInitializer(AppDbContext context, IMapper mapper) : base(context, mapper)
         {
-            using var scope = app.ApplicationServices.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        }
 
+        public void SeedData()
+        {
             context.Database.Migrate();
-
             if (!context.UserAccounts.Any(u => u.Role == "Admin"))
             {
                 var adminUser = new UserAccount
@@ -23,7 +24,6 @@ namespace dotnet9_ketnoigiaothuong.Services
                     Role = "Admin",
                     Status = "Active"
                 };
-
                 context.UserAccounts.Add(adminUser);
                 context.SaveChanges();
             }

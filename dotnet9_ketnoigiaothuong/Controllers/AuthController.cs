@@ -1,82 +1,84 @@
-﻿using dotnet9_ketnoigiaothuong.Infrastructure.Context;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using dotnet9_ketnoigiaothuong.Domain.Entities;
-using dotnet9_ketnoigiaothuong.Services.Token;
-using dotnet9_ketnoigiaothuong.ViewModels.Auth;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.AuthContract;
+using FluentValidation;
 
 namespace dotnet9_ketnoigiaothuong.Controllers
 {
-    [Route("api/auth/")]
+    [Route("api/auth")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
-        private readonly AppDbContext _context;
-        private readonly ITokenService _tokenService;
+        private readonly IValidator<LoginViewModel> _loginValidator;
+        private readonly IValidator<RegisterViewModel> _registerValidator;
 
-        public AuthController(AppDbContext context, ITokenService tokenService)
+        public AuthController(IValidator<LoginViewModel> loginValidator, IValidator<RegisterViewModel> registerValidator)
         {
-            _context = context;
-            _tokenService = tokenService;
+            _loginValidator = loginValidator;
+            _registerValidator = registerValidator;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel registerViewModel)
         {
-            if (_context.UserAccounts.Any(u => u.Email == registerViewModel.Email))
-                return BadRequest("Email already exists");
-
-            var user = new UserAccount
+            var validationResult = await _registerValidator.ValidateAsync(registerViewModel);
+            if (!validationResult.IsValid)
             {
-                FullName = registerViewModel.FullName,
-                Email = registerViewModel.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerViewModel.Password),
-                Role = "Company",
-                Status = null
-            };
-
-            _context.UserAccounts.Add(user);
-            await _context.SaveChangesAsync();
-            return Ok("User registered");
+                return BadRequest(validationResult.Errors);
+            }
+            var response = await Provider.AuthService.RegisterAsync(registerViewModel);
+            if (response == null)
+            {
+                return BadRequest("User already exists");
+            }
+            return Ok(response);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel loginViewModel)
         {
-            var user = await _context.UserAccounts.FirstOrDefaultAsync(u => u.Email == loginViewModel.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(loginViewModel.Password, user.PasswordHash))
-                return Unauthorized("Invalid credentials");
+            var validationResult = await _loginValidator.ValidateAsync(loginViewModel);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+            var user = await Provider.AuthService.Me(loginViewModel.Email);
+            var response = await Provider.AuthService.LoginAsync(loginViewModel);
 
-            var token = _tokenService.GenerateJwtToken(user);
+            var token = response.Data;
+            if (string.IsNullOrEmpty(token))
+            {
+                return Ok(response);
+            }
 
-            Response.Cookies.Append("jwt", token, new CookieOptions
+            Response.Cookies.Append("jwt", token!, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
             });
             
-            if (user.Role == "Admin")
+            if (user.Data!.Role == "Admin")
             {
                 return Ok(new { 
-                    message = "Logged in successfully", 
+                    response,
                     redirect_url = "/admin/dashdoard"
                 });
             }
             else { 
                 return Ok(new { 
-                    message = "Logged in successfully",
+                    response,
                     redirect_url = "/home"
                 });
             }
         }
 
+        [Authorize]
         [HttpPost("logout")]
         public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");
-            return Ok(new { message = "Logged out" });
+            return Ok(new { Data = true, IsSuccess = true, Message = "Logout successfully" });
         }
 
         [Authorize]
@@ -85,7 +87,11 @@ namespace dotnet9_ketnoigiaothuong.Controllers
         {
             //var username = User.Identity.Name;
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
-            var user = await _context.UserAccounts.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await Provider.AuthService.Me(email!);
+            if (user.Data == null)
+            {
+                return Ok(user);
+            }
             return Ok(user);
         }
     }

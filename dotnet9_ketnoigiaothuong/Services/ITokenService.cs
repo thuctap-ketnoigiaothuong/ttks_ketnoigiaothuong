@@ -1,6 +1,6 @@
 ﻿using dotnet9_ketnoigiaothuong.Domain.Entities;
 
-namespace dotnet9_ketnoigiaothuong.Services.Token
+namespace dotnet9_ketnoigiaothuong.Services
 {
     public interface ITokenService
     {
