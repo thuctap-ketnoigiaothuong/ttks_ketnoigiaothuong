@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.AuthContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationRequestContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationResponseContract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IValidator<LoginViewModel>, LoginViewModelValidator>();
 builder.Services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValidator>();
 builder.Services.AddScoped<DbInitializer>();
+builder.Services.AddScoped<IValidator<CreateQuotationRequest>, CreateQuotationRequestValidator>();
+builder.Services.AddScoped<IValidator<CreateQuotationResponse>, CreateQuotationResponseValidator>();
+builder.Services.AddScoped<IValidator<UpdateQuotationResponse>, UpdateQuotationResponseValidator>();
 
 #endregion
 
