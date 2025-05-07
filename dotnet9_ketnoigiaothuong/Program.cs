@@ -2,6 +2,7 @@
 using dotnet9_ketnoigiaothuong.Infrastructure.Context;
 using dotnet9_ketnoigiaothuong.Infrastructure.Exceptions;
 using dotnet9_ketnoigiaothuong.Infrastructure.Mapping;
+using dotnet9_ketnoigiaothuong.Infrastructure.Services;
 using dotnet9_ketnoigiaothuong.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IValidator<LoginViewModel>, LoginViewModelValidator>();
 builder.Services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValidator>();
 builder.Services.AddScoped<DbInitializer>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 #endregion
 

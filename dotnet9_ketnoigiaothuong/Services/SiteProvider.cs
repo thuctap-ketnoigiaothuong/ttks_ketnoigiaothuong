@@ -1,4 +1,6 @@
-﻿namespace dotnet9_ketnoigiaothuong.Services
+﻿using dotnet9_ketnoigiaothuong.Infrastructure.Services;
+
+namespace dotnet9_ketnoigiaothuong.Services
 {
     public class SiteProvider : BaseProvider
     {
@@ -14,5 +16,8 @@
 
         AuthService? authService;
         public AuthService AuthService => authService ??= new AuthService(Context, Mapper, TokenService);
+
+        ProductService? productService;
+        public ProductService ProductService => productService ??= new ProductService(Context, Mapper);
     }
 }
