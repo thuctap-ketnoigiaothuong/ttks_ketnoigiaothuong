@@ -14,5 +14,11 @@
 
         AuthService? authService;
         public AuthService AuthService => authService ??= new AuthService(Context, Mapper, TokenService);
+
+        QuotationRequestService? quotationRequestService;
+        public QuotationRequestService QuotationRequestService => quotationRequestService ??= new QuotationRequestService(Context, Mapper);
+
+        QuotationResponseService? quotationResponseService;
+        public QuotationResponseService QuotationResponseService => quotationResponseService ??= new QuotationResponseService(Context, Mapper);
     }
 }
