@@ -34,7 +34,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             }
             return Ok(new {
                 response,
-                redirect_url = "/auth/login"
+                redirect_url = "/auth/complete-profile"
             });
         }
 
