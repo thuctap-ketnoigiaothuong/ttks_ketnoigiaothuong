@@ -3,6 +3,8 @@ using dotnet9_ketnoigiaothuong.Domain.Entities;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.AuthContract;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.CompanyContract;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.UserContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationRequestContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationResponseContract;
 
 namespace dotnet9_ketnoigiaothuong.Infrastructure.Mapping
 {
@@ -19,6 +21,15 @@ namespace dotnet9_ketnoigiaothuong.Infrastructure.Mapping
 
             CreateMap<Company, ResponseCompany>(); 
             CreateMap<Company, FullResponseCompany>();
+            #region QuotationRequest
+            CreateMap<CreateQuotationRequest, QuotationRequest>();
+            CreateMap<QuotationRequest, ReponseQuotationRequest>();
+            #endregion
+            #region QuotationResponse
+            CreateMap<CreateQuotationResponse, QuotationResponse>();
+            CreateMap<UpdateQuotationResponse, QuotationResponse>();
+            CreateMap<QuotationResponse, ReponseQuotationResponse>();
+            #endregion
 
         }
     }
