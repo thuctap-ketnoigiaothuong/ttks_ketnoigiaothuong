@@ -7,6 +7,6 @@ namespace dotnet9_ketnoigiaothuong.Services
     {
         Task<ApiResponse<ResponseUserAccount>> RegisterAsync(RegisterViewModel model);
         Task<ApiResponse<string>> LoginAsync(LoginViewModel model);
-        Task<ApiResponse<ResponseUserAccount>> Me(string email);
+        Task<ApiResponse<FullResponseUserAccount>> Me(string email);
     }
 }

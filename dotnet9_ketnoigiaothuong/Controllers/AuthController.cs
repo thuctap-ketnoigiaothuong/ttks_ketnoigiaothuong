@@ -32,7 +32,10 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             {
                 return BadRequest("User already exists");
             }
-            return Ok(response);
+            return Ok(new {
+                response,
+                redirect_url = "/auth/complete-profile"
+            });
         }
 
         [HttpPost("login")]

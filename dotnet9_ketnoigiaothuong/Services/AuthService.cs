@@ -68,22 +68,22 @@ namespace dotnet9_ketnoigiaothuong.Services
             };
         }
 
-        public async Task<ApiResponse<ResponseUserAccount>> Me(string email)
+        public async Task<ApiResponse<FullResponseUserAccount>> Me(string email)
         {
             var user = await context.UserAccounts
                 .FirstOrDefaultAsync(x => x.Email == email);
             if (user == null)
             {
-                return new ApiResponse<ResponseUserAccount>
+                return new ApiResponse<FullResponseUserAccount>
                 {
                     Data = null,
                     IsSuccess = false,
                     Message = "User not found"
                 };
             }
-            return new ApiResponse<ResponseUserAccount>
+            return new ApiResponse<FullResponseUserAccount>
             {
-                Data = mapper.Map<ResponseUserAccount>(user),
+                Data = mapper.Map<FullResponseUserAccount>(user),
                 IsSuccess = true,
                 Message = "User found"
             };
