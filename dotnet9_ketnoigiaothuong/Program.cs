@@ -31,6 +31,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IValidator<LoginViewModel>, LoginViewModelValidator>();
 builder.Services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValidator>();
 builder.Services.AddScoped<IValidator<CompanyViewModel>, CompanyViewModelValidator>();
+builder.Services.AddScoped<IValidator<CreateCompanyModel>, CreateCompanyModelValidator>();
+builder.Services.AddScoped<IValidator<UpdateCompanyModel>, UpdateCompanyModelValidator>();
 builder.Services.AddScoped<DbInitializer>();
 builder.Services.AddScoped<IValidator<CreateQuotationRequest>, CreateQuotationRequestValidator>();
 builder.Services.AddScoped<IValidator<CreateQuotationResponse>, CreateQuotationResponseValidator>();
