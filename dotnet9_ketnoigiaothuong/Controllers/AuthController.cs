@@ -32,7 +32,10 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             {
                 return BadRequest("User already exists");
             }
-            return Ok(response);
+            return Ok(new {
+                response,
+                redirect_url = "/auth/complete-profile"
+            });
         }
 
         [HttpPost("login")]
@@ -62,13 +65,13 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             {
                 return Ok(new { 
                     response,
-                    redirect_url = "/admin/dashdoard"
+                    redirect_url = "/admin/dashboard"
                 });
             }
             else { 
                 return Ok(new { 
                     response,
-                    redirect_url = "/home"
+                    redirect_url = "/"
                 });
             }
         }

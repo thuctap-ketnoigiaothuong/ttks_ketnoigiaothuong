@@ -10,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.AuthContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.CompanyContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationRequestContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationResponseContract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,8 +31,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IValidator<LoginViewModel>, LoginViewModelValidator>();
 builder.Services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValidator>();
+builder.Services.AddScoped<IValidator<CompanyViewModel>, CompanyViewModelValidator>();
+builder.Services.AddScoped<IValidator<CreateCompanyModel>, CreateCompanyModelValidator>();
+builder.Services.AddScoped<IValidator<UpdateCompanyModel>, UpdateCompanyModelValidator>();
 builder.Services.AddScoped<DbInitializer>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IValidator<CreateQuotationRequest>, CreateQuotationRequestValidator>();
+builder.Services.AddScoped<IValidator<CreateQuotationResponse>, CreateQuotationResponseValidator>();
+builder.Services.AddScoped<IValidator<UpdateQuotationResponse>, UpdateQuotationResponseValidator>();
+
 
 #endregion
 
@@ -84,6 +94,16 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -93,6 +113,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
