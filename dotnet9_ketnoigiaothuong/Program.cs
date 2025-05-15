@@ -35,6 +35,8 @@ builder.Services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValid
 builder.Services.AddScoped<IValidator<CompanyViewModel>, CompanyViewModelValidator>();
 builder.Services.AddScoped<IValidator<CreateCategoryModel>, CreateCategoryModelValidator>();
 builder.Services.AddScoped<IValidator<UpdateCategoryModel>, UpdateCategoryModelValidator>();
+builder.Services.AddScoped<IValidator<CreateCompanyModel>, CreateCompanyModelValidator>();
+builder.Services.AddScoped<IValidator<UpdateCompanyModel>, UpdateCompanyModelValidator>();
 builder.Services.AddScoped<DbInitializer>();
 builder.Services.AddScoped<IValidator<CreateQuotationRequest>, CreateQuotationRequestValidator>();
 builder.Services.AddScoped<IValidator<CreateQuotationResponse>, CreateQuotationResponseValidator>();

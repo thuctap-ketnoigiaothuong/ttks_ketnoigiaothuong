@@ -35,6 +35,15 @@ namespace dotnet9_ketnoigiaothuong.Infrastructure.Mapping
                 
             CreateMap<CreateCategoryModel, Category>();
             CreateMap<UpdateCategoryModel, Category>();
+
+            CreateMap<CreateCompanyModel, Company>()
+                .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.VerificationStatus, opt => opt.MapFrom(src => "Pending"));
+            
+            CreateMap<UpdateCompanyModel, Company>();
+            
+            CreateMap<Company, CompanyListItem>();
+
             
             #region QuotationRequest
             CreateMap<CreateQuotationRequest, QuotationRequest>();
