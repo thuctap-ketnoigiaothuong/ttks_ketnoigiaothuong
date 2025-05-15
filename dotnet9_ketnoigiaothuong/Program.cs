@@ -2,6 +2,7 @@
 using dotnet9_ketnoigiaothuong.Infrastructure.Context;
 using dotnet9_ketnoigiaothuong.Infrastructure.Exceptions;
 using dotnet9_ketnoigiaothuong.Infrastructure.Mapping;
+using dotnet9_ketnoigiaothuong.Infrastructure.Services;
 using dotnet9_ketnoigiaothuong.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,9 +35,11 @@ builder.Services.AddScoped<IValidator<CompanyViewModel>, CompanyViewModelValidat
 builder.Services.AddScoped<IValidator<CreateCompanyModel>, CreateCompanyModelValidator>();
 builder.Services.AddScoped<IValidator<UpdateCompanyModel>, UpdateCompanyModelValidator>();
 builder.Services.AddScoped<DbInitializer>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IValidator<CreateQuotationRequest>, CreateQuotationRequestValidator>();
 builder.Services.AddScoped<IValidator<CreateQuotationResponse>, CreateQuotationResponseValidator>();
 builder.Services.AddScoped<IValidator<UpdateQuotationResponse>, UpdateQuotationResponseValidator>();
+
 
 #endregion
 
