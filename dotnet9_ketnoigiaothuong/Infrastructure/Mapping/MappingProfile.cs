@@ -6,6 +6,7 @@ using static dotnet9_ketnoigiaothuong.Domain.Contracts.CompanyContract;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.UserContract;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationRequestContract;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationResponseContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.CategoryContract;
 
 namespace dotnet9_ketnoigiaothuong.Infrastructure.Mapping
 {
@@ -40,6 +41,19 @@ namespace dotnet9_ketnoigiaothuong.Infrastructure.Mapping
             CreateMap<Company, ResponseCompany>(); 
             CreateMap<Company, FullResponseCompany>();
             
+            // Category mappings
+            CreateMap<Category, CategoryListItem>()
+                .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => 
+                    src.ParentCategory != null ? src.ParentCategory.CategoryName : null));
+                
+            CreateMap<Category, CategoryDetailModel>()
+                .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => 
+                    src.ParentCategory != null ? src.ParentCategory.CategoryName : null))
+                .ForMember(dest => dest.SubCategories, opt => opt.MapFrom(src => src.SubCategories));
+                
+            CreateMap<CreateCategoryModel, Category>();
+            CreateMap<UpdateCategoryModel, Category>();
+
             CreateMap<CreateCompanyModel, Company>()
                 .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.VerificationStatus, opt => opt.MapFrom(src => "Pending"));
@@ -47,6 +61,7 @@ namespace dotnet9_ketnoigiaothuong.Infrastructure.Mapping
             CreateMap<UpdateCompanyModel, Company>();
             
             CreateMap<Company, CompanyListItem>();
+
             
             #region QuotationRequest
             CreateMap<CreateQuotationRequest, QuotationRequest>();

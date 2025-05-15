@@ -4,6 +4,7 @@ using dotnet9_ketnoigiaothuong.Infrastructure.Exceptions;
 using dotnet9_ketnoigiaothuong.Infrastructure.Mapping;
 using dotnet9_ketnoigiaothuong.Infrastructure.Services;
 using dotnet9_ketnoigiaothuong.Services;
+using dotnet9_ketnoigiaothuong.Services.Category;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using static dotnet9_ketnoigiaothuong.Domain.Contracts.AuthContract;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.CompanyContract;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationRequestContract;
 using static dotnet9_ketnoigiaothuong.Domain.Contracts.QuotationResponseContract;
+using static dotnet9_ketnoigiaothuong.Domain.Contracts.CategoryContract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IValidator<LoginViewModel>, LoginViewModelValidator>();
 builder.Services.AddScoped<IValidator<RegisterViewModel>, RegisterViewModelValidator>();
 builder.Services.AddScoped<IValidator<CompanyViewModel>, CompanyViewModelValidator>();
+builder.Services.AddScoped<IValidator<CreateCategoryModel>, CreateCategoryModelValidator>();
+builder.Services.AddScoped<IValidator<UpdateCategoryModel>, UpdateCategoryModelValidator>();
 builder.Services.AddScoped<IValidator<CreateCompanyModel>, CreateCompanyModelValidator>();
 builder.Services.AddScoped<IValidator<UpdateCompanyModel>, UpdateCompanyModelValidator>();
 builder.Services.AddScoped<DbInitializer>();
@@ -39,6 +43,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IValidator<CreateQuotationRequest>, CreateQuotationRequestValidator>();
 builder.Services.AddScoped<IValidator<CreateQuotationResponse>, CreateQuotationResponseValidator>();
 builder.Services.AddScoped<IValidator<UpdateQuotationResponse>, UpdateQuotationResponseValidator>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
 #endregion

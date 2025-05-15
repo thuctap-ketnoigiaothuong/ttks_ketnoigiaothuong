@@ -1,6 +1,7 @@
 
 ﻿using dotnet9_ketnoigiaothuong.Infrastructure.Services;
 ﻿using dotnet9_ketnoigiaothuong.Services.User;
+using dotnet9_ketnoigiaothuong.Services.Category;
 
 namespace dotnet9_ketnoigiaothuong.Services
 {
@@ -19,6 +20,8 @@ namespace dotnet9_ketnoigiaothuong.Services
         AuthService? authService;
         CompanyService? companyService;
         UserService? userService;
+        CategoryService? categoryService;
+        
         public AuthService AuthService => authService ??= new AuthService(Context, Mapper, TokenService);
 
 
@@ -26,6 +29,7 @@ namespace dotnet9_ketnoigiaothuong.Services
         public ProductService ProductService => productService ??= new ProductService(Context, Mapper);
         public CompanyService CompanyService => companyService ??= new CompanyService(Context, Mapper);
         public UserService UserService => userService ??= new UserService(Context, Mapper);
+        public CategoryService CategoryService => categoryService ??= new CategoryService(Context, Mapper);
 
         QuotationRequestService? quotationRequestService;
         public QuotationRequestService QuotationRequestService => quotationRequestService ??= new QuotationRequestService(Context, Mapper);
