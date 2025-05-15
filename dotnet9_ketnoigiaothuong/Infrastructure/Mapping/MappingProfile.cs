@@ -21,6 +21,15 @@ namespace dotnet9_ketnoigiaothuong.Infrastructure.Mapping
 
             CreateMap<Company, ResponseCompany>(); 
             CreateMap<Company, FullResponseCompany>();
+            
+            CreateMap<CreateCompanyModel, Company>()
+                .ForMember(dest => dest.RegistrationDate, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.VerificationStatus, opt => opt.MapFrom(src => "Pending"));
+            
+            CreateMap<UpdateCompanyModel, Company>();
+            
+            CreateMap<Company, CompanyListItem>();
+            
             #region QuotationRequest
             CreateMap<CreateQuotationRequest, QuotationRequest>();
             CreateMap<QuotationRequest, ReponseQuotationRequest>();
