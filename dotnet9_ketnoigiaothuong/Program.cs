@@ -97,6 +97,7 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "API for connecting businesses and trade partners"
     });
+    c.CustomSchemaIds(type => type.FullName);
 });
 
 builder.Services.AddCors(options =>
