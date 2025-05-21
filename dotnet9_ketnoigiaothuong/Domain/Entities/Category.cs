@@ -7,6 +7,7 @@ namespace dotnet9_ketnoigiaothuong.Domain.Entities
         [Key]
         public int CategoryID { get; set; }
         public string? CategoryName { get; set; }
+        public string? CategoryImage { get; set; }
         public int? ParentCategoryID { get; set; }
 
         public virtual Category? ParentCategory { get; set; }

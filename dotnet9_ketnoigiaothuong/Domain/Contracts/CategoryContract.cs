@@ -8,6 +8,7 @@ namespace dotnet9_ketnoigiaothuong.Domain.Contracts
         {
             public int CategoryID { get; set; }
             public string CategoryName { get; set; }
+            public string? CategoryImage { get; set; }
             public int? ParentCategoryID { get; set; }
             public string ParentCategoryName { get; set; }
         }
@@ -16,6 +17,7 @@ namespace dotnet9_ketnoigiaothuong.Domain.Contracts
         {
             public int CategoryID { get; set; }
             public string CategoryName { get; set; }
+            public string? CategoryImage { get; set; }
             public int? ParentCategoryID { get; set; }
             public string ParentCategoryName { get; set; }
             public List<CategoryListItem> SubCategories { get; set; } = new List<CategoryListItem>();
@@ -24,12 +26,14 @@ namespace dotnet9_ketnoigiaothuong.Domain.Contracts
         public class CreateCategoryModel
         {
             public string CategoryName { get; set; }
+            public string? CategoryImage { get; set; }
             public int? ParentCategoryID { get; set; }
         }
 
         public class UpdateCategoryModel
         {
             public string CategoryName { get; set; }
+            public string? CategoryImage { get; set; }
             public int? ParentCategoryID { get; set; }
         }
     }
