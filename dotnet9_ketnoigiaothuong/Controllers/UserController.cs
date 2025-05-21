@@ -9,7 +9,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
     public class UserController : BaseController
     {
         public UserController() { }
-        [HttpPost("update/{user_id}")]
+        [HttpPut("update/{user_id}")]
         public async Task<IActionResult> updateUser(int user_id, [FromBody] UserUpdate userUpdate)
         {
             var response = await Provider.UserService.UpdateUserAsync(user_id, userUpdate);

@@ -6,7 +6,7 @@ using static dotnet9_ketnoigiaothuong.Domain.Contracts.CategoryContract;
 
 namespace dotnet9_ketnoigiaothuong.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/categories")]
     [ApiController]
     public class CategoryController : BaseController
     {
@@ -21,7 +21,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             _updateCategoryValidator = updateCategoryValidator;
         }
 
-        [HttpGet]
+        [HttpGet("")]
         public async Task<ActionResult<ApiResponse<List<CategoryListItem>>>> GetAllCategories()
         {
             var result = await Provider.CategoryService.GetAllCategoriesAsync();
@@ -31,7 +31,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get-by-id/{id}")]
         public async Task<ActionResult<ApiResponse<CategoryDetailModel>>> GetCategoryById(int id)
         {
             var result = await Provider.CategoryService.GetCategoryByIdAsync(id);
@@ -41,7 +41,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<CategoryDetailModel>>> CreateCategory([FromBody] CreateCategoryModel model)
         {
@@ -58,7 +58,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         [Authorize(Roles = "Admin,Company")]
         public async Task<ActionResult<ApiResponse<CategoryDetailModel>>> UpdateCategory(int id, [FromBody] UpdateCategoryModel model)
         {
@@ -75,7 +75,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteCategory(int id)
         {

@@ -8,7 +8,7 @@ using static dotnet9_ketnoigiaothuong.Domain.Contracts.CompanyContract;
 
 namespace dotnet9_ketnoigiaothuong.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/company")]
     [ApiController]
     public class CompanyController : BaseController
     {
@@ -26,7 +26,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             _updateCompanyValidator = updateCompanyValidator;
         }
 
-        [HttpGet]
+        [HttpGet("")]
         public async Task<ActionResult<ApiResponse<List<CompanyListItem>>>> GetAllCompanies()
         {
             var result = await Provider.CompanyService.GetAllCompaniesAsync();
@@ -36,7 +36,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get-by-id/{id}")]
         public async Task<ActionResult<ApiResponse<FullResponseCompany>>> GetCompanyById(int id)
         {
             var result = await Provider.CompanyService.GetCompanyByIdAsync(id);
@@ -63,7 +63,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         [Authorize(Roles = "Admin,Company")]
         public async Task<ActionResult<ApiResponse<FullResponseCompany>>> UpdateCompany(int id, [FromBody] UpdateCompanyModel model)
         {
@@ -78,7 +78,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             {
                 // Lấy công ty của người dùng hiện tại
                 var email = User.FindFirst(ClaimTypes.Email)?.Value;
-                var userCompany = await Provider.CompanyService.Async_GetCompanyProfileByEmailAndPhoneNumber(email, "");
+                var userCompany = await Provider.CompanyService.Async_GetCompanyProfileByEmailAndPhoneNumber(email, model.PhoneNumber);
                 
                 if (!userCompany.IsSuccess || userCompany.Data.CompanyID != id)
                 {
@@ -93,7 +93,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteCompany(int id)
         {

@@ -35,7 +35,7 @@ namespace dotnet9_ketnoigiaothuong.Services
                 Email = model.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password),
                 Role = "Company",
-                Status = null
+                Status = "Not Activated"
             };
             await context.UserAccounts.AddAsync(user);
             await context.SaveChangesAsync();

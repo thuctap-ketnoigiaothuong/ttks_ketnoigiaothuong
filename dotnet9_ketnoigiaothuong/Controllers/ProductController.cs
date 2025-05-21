@@ -7,11 +7,11 @@ using static dotnet9_ketnoigiaothuong.Domain.Contracts.ProductContract;
 
 namespace dotnet9_ketnoigiaothuong.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/products")]
     [ApiController]
     public class ProductController : BaseController
     {
-        [HttpGet]
+        [HttpGet("")]
         public async Task<ActionResult<IEnumerable<ResponseProductModel>>> GetAllProducts()
         {
             try
@@ -25,7 +25,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get-by-id/{id}")]
         public async Task<ActionResult<ProductDetailModel>> GetProductById(int id)
         {
             try
@@ -42,7 +42,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [Authorize]
         public async Task<ActionResult<ApiResponse<ResponseProductModel>>> CreateProduct([FromBody] CreateProductModel model)
         {
@@ -68,7 +68,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         [Authorize] 
         public async Task<ActionResult<ApiResponse<ResponseProductModel>>> UpdateProduct(int id, [FromBody] UpdateProductModel model)
         {
@@ -87,7 +87,7 @@ namespace dotnet9_ketnoigiaothuong.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteProduct(int id)
         {
